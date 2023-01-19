@@ -1012,4 +1012,4 @@ def iterstatements(stmts):
         yield s
         if isinstance(s, ConditionBlock):
             for c, sl in s:
-                for s2 in iterstatments(sl): yield s2
+                for s2 in iterstatements(sl): yield s2

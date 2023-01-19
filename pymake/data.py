@@ -979,6 +979,7 @@ class Target(object):
         self.variables = Variables(makefile.variables)
         self.explicit = False
         self._state = MAKESTATE_NONE
+        self.mtime = None
 
     def addrule(self, rule):
         assert isinstance(rule, (Rule, PatternRuleInstance))
@@ -1713,7 +1714,7 @@ class Makefile(object):
     def hastarget(self, target):
         return target in self._targets
 
-    _globcheck = re.compile('[[*?]')
+    _globcheck = re.compile('[*?]')
     def gettarget(self, target):
         assert isinstance(target, str_type)
 
@@ -1771,6 +1772,10 @@ class Makefile(object):
             self.defaulttarget = value.resolvestr(self, self.variables, ['.DEFAULT_GOAL']).strip()
 
         self.error = False
+
+    def targets(self):
+        for name, t in self._targets.items():
+            yield name, t
 
     def include(self, path, required=True, weak=False, loc=None):
         """
