@@ -4,25 +4,6 @@ import pymake.parserdata as parserdata
 from pymake.data import StringExpansion
 
 
-def parse_file(fname):
-    print(f"Parsing {fname}")
-    with open(fname, "r") as f:
-        s = f.read()
-
-    dummy = pymake.data.Makefile()
-    stmts = parser.parsestring(s, fname)
-    for stmt in stmts:
-        print(type(stmt), stmt)
-        if isinstance(stmt, parserdata.SetVariable):
-            if not isinstance(stmt.vnameexp, StringExpansion):
-                raise NotImplementedError("Resolving non-trivial variable names")
-            print(stmt.vnameexp.s, stmt.value)
-        elif isinstance(stmt, parserdata.Rule):
-            print(stmt.targetexp, stmt.depexp)
-        elif isinstance(stmt, parserdata.Command):
-            print(stmt.exp.resolvestr(dummy, pymake.data.Variables()))
-
-
 if __name__ == '__main__':
     import sys
     from pymake.command import main
