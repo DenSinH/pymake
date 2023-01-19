@@ -1,9 +1,9 @@
 from __future__ import print_function
 
 import logging, re, os
-from pymake import data, parser, util
-from pymake.globrelative import hasglob, glob
-from pymake import errors
+from . import data, parser, util
+from .globrelative import hasglob, glob
+from . import errors
 
 try:
     from cStringIO import StringIO

@@ -4,7 +4,7 @@ A representation of makefile data structures.
 
 import logging, re, os, sys
 from functools import reduce
-from pymake import errors, parserdata, parser, functions, process, util, implicit, globrelative
+from . import errors, parserdata, parser, functions, process, util, implicit, globrelative
 
 try:
     from cStringIO import StringIO

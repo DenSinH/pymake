@@ -3,10 +3,10 @@ Makefile functions.
 """
 from __future__ import print_function
 
-from pymake import parser, util
+from . import parser, util
 import subprocess, os, logging, sys
-from pymake.globrelative import glob
-from pymake import errors
+from .globrelative import glob
+from . import errors
 
 log = logging.getLogger('pymake.data')
 
@@ -871,4 +871,4 @@ functionmap = {
     'info': InfoFunction,
 }
 
-from pymake import data
+from . import data
