@@ -1132,10 +1132,12 @@ class Target(object):
         # depend on it are always out of date. This is like .FORCE but more
         # compatible with other makes.
         # Otherwise, we don't know how to make it.
-        if not len(self.rules) and self.mtime is None and not util.any((len(rule.prerequisites) > 0
-                                                                        for rule in self.rules)):
-            raise errors.ResolutionError("No rule to make target '%s' needed by %r" % (self.target,
-                                                                                targetstack))
+
+        # todo: removed this because it broke on .PHONY targets which it added itself...
+        # if not len(self.rules) and self.mtime is None and not util.any((len(rule.prerequisites) > 0
+        #                                                                 for rule in self.rules)):
+        #     raise errors.ResolutionError("No rule to make target '%s' needed by %r" % (self.target,
+        #                                                                         targetstack))
 
         if recursive:
             for r in self.rules:
@@ -1763,9 +1765,9 @@ class Makefile(object):
                 for p in r.prerequisites:
                     self.gettarget(p).explicit = True
 
-        np = self.gettarget('.NOTPARALLEL')
-        if len(np.rules):
-            self.context = process.getcontext(1)
+        # np = self.gettarget('.NOTPARALLEL')
+        # if len(np.rules):
+        #     self.context = process.getcontext(1)
 
         flavor, source, value = self.variables.get('.DEFAULT_GOAL')
         if value is not None:

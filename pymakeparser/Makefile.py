@@ -1,5 +1,6 @@
 from .pymake import data
 from .pymake import parser
+from .pymake import util
 from .pymake import parserdata
 
 from .Rule import Rule
@@ -11,7 +12,8 @@ class Makefile:
     def __init__(self, filepath):
         self.filepath = filepath
         self._mkfile = data.Makefile()
-        self._mkfile.include(filepath)
+        stmts = parser.parsefile(self.filepath)
+        stmts.execute(self._mkfile)
         self._mkfile.finishparsing()
         self.targets = {}
 
@@ -26,7 +28,7 @@ class Makefile:
             for name, target in self._mkfile.targets():
                 if name in resolved:
                     continue
-                target.resolvevpath(self._mkfile)
+                target.resolvedeps(self._mkfile, [], [], True)
                 resolved.add(name)
                 break
             else:
