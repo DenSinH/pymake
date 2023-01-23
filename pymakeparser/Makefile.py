@@ -8,9 +8,9 @@ from .Target import Target
 
 class Makefile:
 
-    def __init__(self, filepath):
+    def __init__(self, filepath, **kwargs):
         self.filepath = filepath
-        self._mkfile = data.Makefile()
+        self._mkfile = data.Makefile(**kwargs)
         self._mkfile.include(filepath)
         self._mkfile.finishparsing()
         self.targets = {}
@@ -51,3 +51,21 @@ class Makefile:
             self.targets[name] = Target(
                 name, rules, variables
             )
+
+    def topsort(self):
+        """
+        generator yielding targets in topological sort order
+        """
+        found = set()
+        todo = dict(self.targets)
+
+        while todo:
+            _layer = []
+            for name, target in todo.items():
+                if all(dep in found for rule in target.rules for dep in rule.prerequisites):
+                    _layer.append(target)
+
+            for target in _layer:
+                todo.pop(target.name)
+                found.add(target.name)
+            yield _layer
