@@ -771,34 +771,7 @@ class ShellFunction(Function):
     __slots__ = Function.__slots__
 
     def resolve(self, makefile, variables, fd, setting):
-        from pymake.process import prepare_command
-        cline = self._arguments[0].resolvestr(makefile, variables, setting)
-        executable, cline = prepare_command(cline, makefile.workdir, self.loc)
-
-        # subprocess.Popen doesn't use the PATH set in the env argument for
-        # finding the executable on some platforms (but strangely it does on
-        # others!), so set os.environ['PATH'] explicitly.
-        oldpath = os.environ['PATH']
-        if makefile.env is not None and 'PATH' in makefile.env:
-            os.environ['PATH'] = makefile.env['PATH']
-
-        log.debug("%s: running command '%s'" % (self.loc, ' '.join(cline)))
-        try:
-            p = subprocess.Popen(cline, executable=executable, env=makefile.env, shell=False,
-                                 stdout=subprocess.PIPE, cwd=makefile.workdir)
-        except OSError as e:
-            print("Error executing command %s" % cline[0], e, file=sys.stderr)
-            return
-        finally:
-            os.environ['PATH'] = oldpath
-
-        stdout, stderr = p.communicate()
-        stdout = stdout.replace('\r\n', '\n')
-        if stdout.endswith('\n'):
-            stdout = stdout[:-1]
-        stdout = stdout.replace('\n', ' ')
-
-        fd.write(stdout)
+        pass
 
 class ErrorFunction(Function):
     name = 'error'
